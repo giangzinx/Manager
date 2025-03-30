@@ -5,6 +5,7 @@ import ui.StudentUI;
 import java.sql.*;
 import java.util.ArrayList;
 
+
 public class StudentDAO implements InterfaceDAO<Student> {
     public void getCheckStudent(String studentEmail, String studentPassword) {
         String sql = "SELECT * FROM students WHERE email= ?";
@@ -44,6 +45,11 @@ public class StudentDAO implements InterfaceDAO<Student> {
 
     @Override
     public Student selectById(Student student) {
+        return null;
+    }
+
+    @Override
+    public Student selectByName(String name) {
         return null;
     }
 

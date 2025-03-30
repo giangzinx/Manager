@@ -12,6 +12,8 @@ public interface InterfaceDAO <T>{
 
     public T selectById(T t);
 
+    public T selectByName(String name);
+
     public ArrayList<T> selectAll();
 
     public ArrayList<T> selectByCondition(T t);

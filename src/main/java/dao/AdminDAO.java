@@ -95,6 +95,27 @@ public class AdminDAO implements InterfaceDAO<Admin> {
     }
 
     @Override
+    public Admin selectByName(String name) {
+        String sql = "SELECT * FROM admins WHERE name = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, name);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new Admin(
+                        rs.getInt("admin_id"),
+                        rs.getString("name"),
+                        rs.getBoolean("super"),
+                        rs.getString("password")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
     public ArrayList<Admin> selectAll() {
         ArrayList<Admin> admins = new ArrayList<>();
         String sql = "SELECT * FROM admins";

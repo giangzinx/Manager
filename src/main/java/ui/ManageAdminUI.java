@@ -56,8 +56,8 @@ public class ManageAdminUI {
 
     private static void updateAdmin() {
         System.out.print("Nhập tên Admin cần sửa: ");
-        String name = scanner.nextLine();
-        Admin existingAdmin = adminDAO.selectById(new Admin(name, false,""));
+        String name = scanner.nextLine().trim();
+        Admin existingAdmin = adminDAO.selectByName(name);
 
         if (existingAdmin != null) {
             System.out.print("Nhập mật khẩu mới: ");
