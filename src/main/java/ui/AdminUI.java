@@ -1,7 +1,5 @@
 package ui;
 
-import dao.StudentDAO;
-
 import java.util.Scanner;
 
 public class AdminUI {
