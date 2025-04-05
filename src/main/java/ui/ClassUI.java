@@ -117,7 +117,7 @@ public class ClassUI {
         ArrayList<Class> classes = classDAO.selectByCondition(searchClass);
 
         if (classes.isEmpty()) {
-            System.out.println("Không tìm thấy lớp học phù hợp.");
+            System.out.println("Không tìm thấy lớp học phù hợp!");
         } else {
             System.out.println("Danh sách lớp học tìm được:");
             for (Class aClass : classes) {
