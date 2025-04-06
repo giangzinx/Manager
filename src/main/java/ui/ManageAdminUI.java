@@ -17,9 +17,13 @@ public class ManageAdminUI {
             System.out.println("3. Xóa Admin");
             System.out.println("4. Xem danh sách Admin");
             System.out.println("5. Thoát");
-            int choice = scanner.nextInt();
-            scanner.nextLine();
-
+            int choice;
+            try {
+                choice = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("❌ Lựa chọn không hợp lệ.");
+                continue;
+            }
             switch (choice) {
                 case 1:
                     addAdmin();
@@ -135,7 +139,7 @@ public class ManageAdminUI {
             }
             else{
                 adminDAO.delete(existingAdmin);
-                System.out.println("Admin đã được xóa thành công!");
+                System.out.println("Tài khoản " + existingAdmin.getName() + " đã được xóa thành công!");
             }
         } else {
             System.out.println("Tài khoản không tồn tại!");

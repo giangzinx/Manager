@@ -9,11 +9,11 @@ public class StudentUI {
     private static Scanner scanner = new Scanner(System.in);
     private static StudentDAO studentDAO = new StudentDAO();
 
-    public static void indexStudents() {
+    public static void indexStudents(int studentId) {
         while (true) {
             System.out.println("1. Đăng ký môn học");
             System.out.println("2. Xem kết quả học tập (Xem điểm, xếp loại học lực)");
-            System.out.println("3. Xem lịch học");
+            System.out.println("3. Xem kết quả đăng ký môn học");
             System.out.println("4. Xem thông báo từ giảng viên/quản trị viên");
             System.out.println("5. Đăng xuất");
             int choice = scanner.nextInt();
@@ -25,7 +25,7 @@ public class StudentUI {
                 case 2:
                     break;
                 case 3:
-                    return;
+                    RegistrationUI.showRegistrationMenu(studentId);                    break;
                 case 4:
                     return;
                 case 5:
@@ -57,4 +57,5 @@ public class StudentUI {
             System.out.println(s);
         }
     }
+
 }

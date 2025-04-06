@@ -74,11 +74,11 @@ public class AdminDAO implements InterfaceDAO<Admin> {
     }
 
     @Override
-    public Admin selectById(Admin admin) {
+    public Admin selectById(String id) {
         String sql = "SELECT * FROM admins WHERE admin_id = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, admin.getAdmin_id());
+            stmt.setInt(1, Integer.parseInt(id));
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return new Admin(

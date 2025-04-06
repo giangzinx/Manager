@@ -29,15 +29,17 @@ public class SuperAdminUI {
 
                     break;
                 case 3:
-                    return;
+                    break;
                 case 4:
-                    return;
+                    ClassUI.quanLyLopHoc(); // ✅ Gọi giao diện quản lý lớp học
+                    break;
                 case 5:
-                    return;
+                    break;
                 case 6:
-                    return;
+                    break;
                 case 7:
-                    return;
+                    NotificationUI.run(1, "admin"); // Truyền ID thật và vai trò thật của người gửi
+                    break;
                 case 8:
                     return;
                 default:

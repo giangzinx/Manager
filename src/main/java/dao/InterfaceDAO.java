@@ -10,7 +10,7 @@ public interface InterfaceDAO <T>{
 
     public void delete(T t);
 
-    public T selectById(T t);
+    public T selectById(String id);
 
     public T selectByName(String name);
 
