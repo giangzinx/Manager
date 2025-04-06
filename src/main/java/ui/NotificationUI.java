@@ -13,10 +13,10 @@ public class NotificationUI {
     public static void run(int currentUserId, String currentRole) {
         while (true) {
             System.out.println("\n--- Quản lý Thông báo ---");
-            System.out.println("1. Gửi thông báo");
-            System.out.println("2. Xem danh sách thông báo");
-            System.out.println("3. Sửa thông báo");
-            System.out.println("4. Xóa thông báo");
+            System.out.println("1. Thêm thông báo");
+            System.out.println("2. Sửa thông báo");
+            System.out.println("3. Xóa thông báo");
+            System.out.println("4. Xem danh sách thông báo");
             System.out.println("0. Quay lại");
             System.out.print("Chọn: ");
             int choice = Integer.parseInt(sc.nextLine());
@@ -30,14 +30,6 @@ public class NotificationUI {
                     break;
 
                 case 2:
-                    List<Notification> list = service.getAllNotifications();
-                    for (Notification n : list) {
-                        System.out.println("[" + n.getCreatedAt() + "] " + n.getSenderRole().toUpperCase() +
-                                " (ID: " + n.getSenderId() + "): " + n.getMessage());
-                    }
-                    break;
-
-                case 3: // Sửa thông báo
                     System.out.print("Nhập ID thông báo cần sửa: ");
                     int updateId = Integer.parseInt(sc.nextLine());
                     System.out.print("Nhập nội dung mới: ");
@@ -46,11 +38,19 @@ public class NotificationUI {
                     System.out.println("✅ Đã cập nhật thông báo.");
                     break;
 
-                case 4: // Xóa thông báo
+                case 3:
                     System.out.print("Nhập ID thông báo cần xóa: ");
                     int deleteId = Integer.parseInt(sc.nextLine());
                     service.deleteNotification(deleteId);
                     System.out.println("✅ Đã xóa thông báo.");
+                    break;
+
+                case 4:
+                    List<Notification> list = service.getAllNotifications();
+                    for (Notification n : list) {
+                        System.out.println("[" + n.getCreatedAt() + "] " + n.getSenderRole().toUpperCase() +
+                                " (ID: " + n.getSenderId() + "): " + n.getMessage());
+                    }
                     break;
 
                 case 0:

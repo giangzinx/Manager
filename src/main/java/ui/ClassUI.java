@@ -14,8 +14,8 @@ public class ClassUI {
         while (true) {
             System.out.println("\n--- Quản lý Lớp học ---");
             System.out.println("1. Thêm lớp học");
-            System.out.println("2. Xóa lớp học");
-            System.out.println("3. Sửa thông tin lớp học");  // ✅ Mục sửa đưa lên trước
+            System.out.println("2. Sửa thông tin lớp học");
+            System.out.println("3. Xóa lớp học");
             System.out.println("4. Xem danh sách lớp học");
             System.out.println("0. Quay lại");
             System.out.print("Nhập lựa chọn của bạn: ");
@@ -33,10 +33,10 @@ public class ClassUI {
                     themLop();
                     break;
                 case 2:
-                    xoaLop();
+                    suaLop();
                     break;
                 case 3:
-                    suaLop();  // ✅ Xử lý mục sửa
+                    xoaLop();
                     break;
                 case 4:
                     hienThiDanhSach();
@@ -63,13 +63,6 @@ public class ClassUI {
         System.out.println("✅ Đã thêm lớp học thành công!");
     }
 
-    private static void xoaLop() {
-        System.out.print("Nhập mã lớp cần xóa: ");
-        String maLop = sc.nextLine();
-        classService.removeClass(maLop);
-        System.out.println("✅ Đã xóa lớp học nếu tồn tại.");
-    }
-
     private static void suaLop() {
         System.out.print("Nhập mã lớp cần sửa: ");
         String classId = sc.nextLine();
@@ -82,6 +75,13 @@ public class ClassUI {
 
         classService.updateClass(classId, courseId, teacherId, maxStudents);
         System.out.println("✅ Đã cập nhật thông tin lớp học.");
+    }
+
+    private static void xoaLop() {
+        System.out.print("Nhập mã lớp cần xóa: ");
+        String maLop = sc.nextLine();
+        classService.removeClass(maLop);
+        System.out.println("✅ Đã xóa lớp học nếu tồn tại.");
     }
 
     private static void hienThiDanhSach() {
