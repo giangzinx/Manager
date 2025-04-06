@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class SignedUI {
     private static Scanner scanner = new Scanner(System.in);
-    public static void SignedMananger() {
+    public static void SignedMananger() throws Exception {
         while (true) {
             Scanner scanner = new Scanner(System.in);
             System.out.println("Vui lòng chọn phương thức đăng nhập:");
@@ -39,7 +39,7 @@ public class SignedUI {
         String password = scanner.nextLine().trim();
         return new String[]{userInput, password};
     }
-    private static void signedAdmin(){
+    private static void signedAdmin() throws Exception {
         AdminDAO adminDAO = new AdminDAO();
         String[] account = getUserCredentials();
         adminDAO.getCheckAdmin(account[0], account[1]);

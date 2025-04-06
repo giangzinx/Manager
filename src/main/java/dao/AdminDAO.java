@@ -7,7 +7,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class AdminDAO implements InterfaceDAO<Admin> {
-    public void getCheckAdmin(String name, String password) {
+    public void getCheckAdmin(String name, String password) throws Exception {
         String sql = "SELECT * FROM admins WHERE name= ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {

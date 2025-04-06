@@ -8,7 +8,7 @@ public class SuperAdminUI {
     private static Scanner scanner = new Scanner(System.in);
 //    private static StudentDAO studentDAO = new StudentDAO();
 
-    public static void indexSuperAdmins() {
+    public static void indexSuperAdmins() throws Exception {
         while (true) {
             System.out.println("1. Quản lý thông tin Admin (Thêm, sửa, xóa, xem danh sách");
             System.out.println("2. Quản lý thông tin sinh viên (Thêm, sửa, xóa, xem danh sách)");
