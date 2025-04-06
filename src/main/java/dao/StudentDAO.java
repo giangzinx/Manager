@@ -15,7 +15,8 @@ public class StudentDAO implements InterfaceDAO<Student> {
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) { // Phải có rs.next() trước khi lấy dữ liệu từ ResultSet
                 if (rs.getString("email").equals(studentEmail) && rs.getString("password").equals(studentPassword)) {
-                    StudentUI.indexStudents();
+                    int studentId = rs.getInt("student_id"); // hoặc rs.getInt("id") tùy theo tên cột
+                    StudentUI.indexStudents(studentId); // ✅ Truyền đúng tham số
                 } else {
                     System.out.println("Wrong email or password");
                 }
