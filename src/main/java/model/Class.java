@@ -1,12 +1,12 @@
 package model;
 
-public class ClassRoom {
+public class Class {
     private String classId;
     private String courseId;
     private String teacherId;
     private int maxStudents;
 
-    public ClassRoom(String classId, String courseId, String teacherId, int maxStudents) {
+    public Class(String classId, String courseId, String teacherId, int maxStudents) {
         this.classId = classId;
         this.courseId = courseId;
         this.teacherId = teacherId;

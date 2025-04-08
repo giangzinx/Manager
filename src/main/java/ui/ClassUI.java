@@ -1,6 +1,6 @@
 package ui;
 
-import model.ClassRoom;
+import model.Class;
 import service.ClassService;
 
 import java.util.ArrayList;
@@ -189,7 +189,7 @@ public class ClassUI {
             classId = getNonEmptyInput("Nhập mã lớp cần cập nhật: ");
             try {
                 validateClassId(classId);
-                ClassRoom existing = classService.getClassById(classId);
+                Class existing = classService.getClassById(classId);
                 if (existing == null) {
                     System.out.println("❌ Không tìm thấy lớp với mã: " + classId);
                 } else {
@@ -245,7 +245,7 @@ public class ClassUI {
             classId = getNonEmptyInput("Nhập mã lớp cần xóa: ");
             try {
                 validateClassId(classId);
-                ClassRoom existing = classService.getClassById(classId);
+                Class existing = classService.getClassById(classId);
                 if (existing == null) {
                     System.out.println("❌ Không tìm thấy lớp với mã: " + classId);
                 } else {
@@ -262,11 +262,11 @@ public class ClassUI {
 
     private static void showAllClasses() {
         System.out.println("\n--- Danh sách lớp học ---");
-        ArrayList<ClassRoom> classList = classService.getAllClasses();
+        ArrayList<Class> classList = classService.getAllClasses();
         if (classList.isEmpty()) {
             System.out.println("⚠ Không có lớp học nào.");
         } else {
-            for (ClassRoom cls : classList) {
+            for (Class cls : classList) {
                 System.out.println("Mã lớp: " + cls.getClassId() +
                         " | Mã môn học: " + cls.getCourseId() +
                         " | Mã giảng viên: " + cls.getTeacherId() +

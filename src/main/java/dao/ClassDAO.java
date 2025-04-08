@@ -1,13 +1,13 @@
 package dao;
 
-import model.ClassRoom;
+import model.Class;
 import java.sql.*;
 import java.util.ArrayList;
 
-public class ClassDAO implements InterfaceDAO<ClassRoom> {
+public class ClassDAO implements InterfaceDAO<Class> {
 
     @Override
-    public void add(ClassRoom c) {
+    public void add(Class c) {
         String sql = "INSERT INTO classes (class_id, course_id, teacher_id, max_students) VALUES (?, ?, ?, ?)";
 
         try (
@@ -25,7 +25,7 @@ public class ClassDAO implements InterfaceDAO<ClassRoom> {
     }
 
     @Override
-    public void update(ClassRoom c) {
+    public void update(Class c) {
         String sql = "UPDATE classes SET course_id = ?, teacher_id = ?, max_students = ? WHERE class_id = ?";
 
         try (
@@ -43,7 +43,7 @@ public class ClassDAO implements InterfaceDAO<ClassRoom> {
     }
 
     @Override
-    public void delete(ClassRoom c) {
+    public void delete(Class c) {
         String sql = "DELETE FROM classes WHERE class_id = ?";
 
         try (
@@ -58,7 +58,7 @@ public class ClassDAO implements InterfaceDAO<ClassRoom> {
     }
 
     @Override
-    public ClassRoom selectById(ClassRoom c) {
+    public Class selectById(Class c) {
         String sql = "SELECT * FROM classes WHERE class_id = ?";
         try (
                 Connection conn = DatabaseConnection.getConnection();
@@ -67,7 +67,7 @@ public class ClassDAO implements InterfaceDAO<ClassRoom> {
             stmt.setString(1, c.getClassId());
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return new ClassRoom(
+                return new Class(
                         rs.getString("class_id"),
                         rs.getString("course_id"),
                         rs.getString("teacher_id"),
@@ -81,7 +81,7 @@ public class ClassDAO implements InterfaceDAO<ClassRoom> {
     }
 
     @Override
-    public ClassRoom selectByName(String name) {
+    public Class selectByName(String name) {
         String sql = "SELECT * FROM classes WHERE class_id = ?"; // dùng class_id làm tên
         try (
                 Connection conn = DatabaseConnection.getConnection();
@@ -90,7 +90,7 @@ public class ClassDAO implements InterfaceDAO<ClassRoom> {
             stmt.setString(1, name);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return new ClassRoom(
+                return new Class(
                         rs.getString("class_id"),
                         rs.getString("course_id"),
                         rs.getString("teacher_id"),
@@ -104,8 +104,8 @@ public class ClassDAO implements InterfaceDAO<ClassRoom> {
     }
 
     @Override
-    public ArrayList<ClassRoom> selectAll() {
-        ArrayList<ClassRoom> list = new ArrayList<>();
+    public ArrayList<Class> selectAll() {
+        ArrayList<Class> list = new ArrayList<>();
         String sql = "SELECT * FROM classes";
 
         try (
@@ -114,7 +114,7 @@ public class ClassDAO implements InterfaceDAO<ClassRoom> {
                 ResultSet rs = stmt.executeQuery()
         ) {
             while (rs.next()) {
-                ClassRoom c = new ClassRoom(
+                Class c = new Class(
                         rs.getString("class_id"),
                         rs.getString("course_id"),
                         rs.getString("teacher_id"),
@@ -130,8 +130,8 @@ public class ClassDAO implements InterfaceDAO<ClassRoom> {
     }
 
     @Override
-    public ArrayList<ClassRoom> selectByCondition(ClassRoom condition) {
-        ArrayList<ClassRoom> list = new ArrayList<>();
+    public ArrayList<Class> selectByCondition(Class condition) {
+        ArrayList<Class> list = new ArrayList<>();
         String sql = "SELECT * FROM classes WHERE teacher_id = ?";
 
         try (
@@ -141,7 +141,7 @@ public class ClassDAO implements InterfaceDAO<ClassRoom> {
             stmt.setString(1, condition.getTeacherId());
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                ClassRoom c = new ClassRoom(
+                Class c = new Class(
                         rs.getString("class_id"),
                         rs.getString("course_id"),
                         rs.getString("teacher_id"),
