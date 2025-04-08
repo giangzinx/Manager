@@ -3,98 +3,265 @@ package ui;
 import model.ClassRoom;
 import service.ClassService;
 
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class ClassUI {
-    private static ClassService classService = new ClassService();
-    private static Scanner sc = new Scanner(System.in);
+    private static final Scanner scanner = new Scanner(System.in);
+    private static final ClassService classService = new ClassService();
 
     public static void quanLyLopHoc() {
+        showMenu();
+    }
+
+    public static void showMenu() {
         while (true) {
-            System.out.println("\n--- Quản lý Lớp học ---");
+            System.out.println("\n===== QUẢN LÝ LỚP HỌC =====");
             System.out.println("1. Thêm lớp học");
-            System.out.println("2. Sửa thông tin lớp học");
+            System.out.println("2. Cập nhật lớp học");
             System.out.println("3. Xóa lớp học");
             System.out.println("4. Xem danh sách lớp học");
-            System.out.println("0. Quay lại");
-            System.out.print("Nhập lựa chọn của bạn: ");
+            System.out.println("0. Thoát");
 
-            int luaChon;
             try {
-                luaChon = Integer.parseInt(sc.nextLine());
+                System.out.print("➡ Nhập lựa chọn của bạn: ");
+                int choice = Integer.parseInt(scanner.nextLine());
+                switch (choice) {
+                    case 1 -> addClass();
+                    case 2 -> updateClass();
+                    case 3 -> deleteClass();
+                    case 4 -> showAllClasses();
+                    case 0 -> {
+                        System.out.println("➡ Thoát quản lý lớp học.");
+                        return;
+                    }
+                    default -> System.out.println("❌ Lựa chọn không hợp lệ. Vui lòng thử lại.");
+                }
             } catch (NumberFormatException e) {
-                System.out.println("❌ Lựa chọn không hợp lệ. Vui lòng nhập số.");
-                continue;
-            }
-
-            switch (luaChon) {
-                case 1:
-                    themLop();
-                    break;
-                case 2:
-                    suaLop();
-                    break;
-                case 3:
-                    xoaLop();
-                    break;
-                case 4:
-                    hienThiDanhSach();
-                    break;
-                case 0:
-                    return;
-                default:
-                    System.out.println("❌ Lựa chọn không hợp lệ.");
+                System.out.println("❌ Vui lòng nhập số nguyên hợp lệ.");
             }
         }
     }
 
-    private static void themLop() {
-        System.out.print("Nhập mã lớp: ");
-        String classId = sc.nextLine();
-        System.out.print("Nhập mã môn học: ");
-        String courseId = sc.nextLine();
-        System.out.print("Nhập mã giảng viên: ");
-        String teacherId = sc.nextLine();
-        System.out.print("Nhập số sinh viên tối đa: ");
-        int maxStudents = Integer.parseInt(sc.nextLine());
+    // ===== VALIDATION INPUT =====
+
+    private static String getNonEmptyInput(String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            String input = scanner.nextLine().trim();
+            try {
+                validateNonEmpty(input);
+                return input;
+            } catch (Exception e) {
+                System.out.println("❌ " + e.getMessage());
+            }
+        }
+    }
+
+    private static int getValidInteger(String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            String input = scanner.nextLine().trim();
+            try {
+                return validateInteger(input);
+            } catch (Exception e) {
+                System.out.println("❌ " + e.getMessage());
+            }
+        }
+    }
+
+    private static void validateNonEmpty(String input) throws Exception {
+        if (input == null || input.isBlank()) {
+            throw new Exception("Trường này không được để trống.");
+        }
+    }
+
+    private static int validateInteger(String input) throws Exception {
+        try {
+            return Integer.parseInt(input);
+        } catch (NumberFormatException e) {
+            throw new Exception("Vui lòng nhập số nguyên hợp lệ.");
+        }
+    }
+
+    private static void validateClassId(String classId) throws Exception {
+        if (classId.trim().isEmpty()) {
+            throw new Exception("Mã lớp không được để trống.");
+        }
+        if (!classId.matches("[a-zA-Z0-9]+")) {
+            throw new Exception("Mã lớp chỉ được chứa các chữ cái và số.");
+        }
+    }
+
+    private static void validateCourseId(String courseId) throws Exception {
+        if (courseId.trim().isEmpty()) {
+            throw new Exception("Mã môn học không được để trống.");
+        }
+        if (!courseId.matches("[a-zA-Z0-9]+")) {
+            throw new Exception("Mã môn học chỉ được chứa các chữ cái và số.");
+        }
+    }
+
+    private static void validateTeacherId(String teacherId) throws Exception {
+        if (teacherId.trim().isEmpty()) {
+            throw new Exception("Mã giảng viên không được để trống.");
+        }
+        if (!teacherId.matches("[a-zA-Z0-9]+")) {
+            throw new Exception("Mã giảng viên chỉ được chứa các chữ cái và số.");
+        }
+    }
+
+    private static int validateMaxStudents(String input) throws Exception {
+        try {
+            return Integer.parseInt(input);
+        } catch (NumberFormatException e) {
+            throw new Exception("Số sinh viên tối đa phải là số nguyên.");
+        }
+    }
+
+    // ===== CHỨC NĂNG =====
+
+    private static void addClass() {
+        System.out.println("\n--- Thêm lớp học mới ---");
+
+        String classId;
+        while (true) {
+            classId = getNonEmptyInput("Nhập mã lớp: ");
+            try {
+                validateClassId(classId);
+                break;
+            } catch (Exception e) {
+                System.out.println("❌ " + e.getMessage());
+            }
+        }
+
+        String courseId;
+        while (true) {
+            courseId = getNonEmptyInput("Nhập mã môn học: ");
+            try {
+                validateCourseId(courseId);
+                break;
+            } catch (Exception e) {
+                System.out.println("❌ " + e.getMessage());
+            }
+        }
+
+        String teacherId;
+        while (true) {
+            teacherId = getNonEmptyInput("Nhập mã giảng viên: ");
+            try {
+                validateTeacherId(teacherId);
+                break;
+            } catch (Exception e) {
+                System.out.println("❌ " + e.getMessage());
+            }
+        }
+
+        int maxStudents;
+        while (true) {
+            try {
+                maxStudents = getValidInteger("Nhập số sinh viên tối đa: ");
+                validateMaxStudents(String.valueOf(maxStudents));
+                break;
+            } catch (Exception e) {
+                System.out.println("❌ " + e.getMessage());
+            }
+        }
 
         classService.createClass(classId, courseId, teacherId, maxStudents);
-        System.out.println("✅ Đã thêm lớp học thành công!");
+        System.out.println("✅ Thêm lớp học thành công.");
     }
 
-    private static void suaLop() {
-        System.out.print("Nhập mã lớp cần sửa: ");
-        String classId = sc.nextLine();
-        System.out.print("Nhập mã môn học mới: ");
-        String courseId = sc.nextLine();
-        System.out.print("Nhập mã giảng viên mới: ");
-        String teacherId = sc.nextLine();
-        System.out.print("Nhập số sinh viên tối đa mới: ");
-        int maxStudents = Integer.parseInt(sc.nextLine());
+    private static void updateClass() {
+        System.out.println("\n--- Cập nhật lớp học ---");
+
+        String classId;
+        while (true) {
+            classId = getNonEmptyInput("Nhập mã lớp cần cập nhật: ");
+            try {
+                validateClassId(classId);
+                ClassRoom existing = classService.getClassById(classId);
+                if (existing == null) {
+                    System.out.println("❌ Không tìm thấy lớp với mã: " + classId);
+                } else {
+                    break;
+                }
+            } catch (Exception e) {
+                System.out.println("❌ " + e.getMessage());
+            }
+        }
+
+        String courseId;
+        while (true) {
+            courseId = getNonEmptyInput("Nhập mã môn học mới: ");
+            try {
+                validateCourseId(courseId);
+                break;
+            } catch (Exception e) {
+                System.out.println("❌ " + e.getMessage());
+            }
+        }
+
+        String teacherId;
+        while (true) {
+            teacherId = getNonEmptyInput("Nhập mã giảng viên mới: ");
+            try {
+                validateTeacherId(teacherId);
+                break;
+            } catch (Exception e) {
+                System.out.println("❌ " + e.getMessage());
+            }
+        }
+
+        int maxStudents;
+        while (true) {
+            try {
+                maxStudents = getValidInteger("Nhập số sinh viên tối đa mới: ");
+                validateMaxStudents(String.valueOf(maxStudents));
+                break;
+            } catch (Exception e) {
+                System.out.println("❌ " + e.getMessage());
+            }
+        }
 
         classService.updateClass(classId, courseId, teacherId, maxStudents);
-        System.out.println("✅ Đã cập nhật thông tin lớp học.");
+        System.out.println("✅ Cập nhật lớp học thành công.");
     }
 
-    private static void xoaLop() {
-        System.out.print("Nhập mã lớp cần xóa: ");
-        String maLop = sc.nextLine();
-        classService.removeClass(maLop);
-        System.out.println("✅ Đã xóa lớp học nếu tồn tại.");
+    private static void deleteClass() {
+        System.out.println("\n--- Xóa lớp học ---");
+
+        String classId;
+        while (true) {
+            classId = getNonEmptyInput("Nhập mã lớp cần xóa: ");
+            try {
+                validateClassId(classId);
+                ClassRoom existing = classService.getClassById(classId);
+                if (existing == null) {
+                    System.out.println("❌ Không tìm thấy lớp với mã: " + classId);
+                } else {
+                    break;
+                }
+            } catch (Exception e) {
+                System.out.println("❌ " + e.getMessage());
+            }
+        }
+
+        classService.removeClass(classId);
+        System.out.println("✅ Xóa lớp học thành công.");
     }
 
-    private static void hienThiDanhSach() {
-        List<ClassRoom> danhSach = classService.getAllClasses();
-        System.out.println("\n📚 Danh sách lớp học:");
-        if (danhSach.isEmpty()) {
-            System.out.println("(Trống)");
+    private static void showAllClasses() {
+        System.out.println("\n--- Danh sách lớp học ---");
+        ArrayList<ClassRoom> classList = classService.getAllClasses();
+        if (classList.isEmpty()) {
+            System.out.println("⚠ Không có lớp học nào.");
         } else {
-            for (ClassRoom lop : danhSach) {
-                System.out.println("Mã lớp: " + lop.getClassId() +
-                        " | Mã môn: " + lop.getCourseId() +
-                        " | Giảng viên: " + lop.getTeacherId() +
-                        " | SV tối đa: " + lop.getMaxStudents());
+            for (ClassRoom cls : classList) {
+                System.out.println("Mã lớp: " + cls.getClassId() +
+                        " | Mã môn học: " + cls.getCourseId() +
+                        " | Mã giảng viên: " + cls.getTeacherId() +
+                        " | SV tối đa: " + cls.getMaxStudents());
             }
         }
     }
