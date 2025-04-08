@@ -84,31 +84,40 @@ public class ClassUI {
         }
     }
 
+    // Kiểm tra số nguyên không âm
+    private static void validatePositiveInteger(String input) throws Exception {
+        try {
+            int value = Integer.parseInt(input);
+            if (value < 0) {
+                throw new Exception("Giá trị phải là số nguyên không âm.");
+            }
+        } catch (NumberFormatException e) {
+            throw new Exception("Vui lòng nhập số nguyên hợp lệ.");
+        }
+    }
+
+    // Kiểm tra mã lớp (chỉ nhận số nguyên không âm)
     private static void validateClassId(String classId) throws Exception {
         if (classId.trim().isEmpty()) {
             throw new Exception("Mã lớp không được để trống.");
         }
-        if (!classId.matches("[a-zA-Z0-9]+")) {
-            throw new Exception("Mã lớp chỉ được chứa các chữ cái và số.");
-        }
+        validatePositiveInteger(classId);  // Kiểm tra nếu là số nguyên không âm
     }
 
+    // Kiểm tra mã môn học (chỉ nhận số nguyên không âm)
     private static void validateCourseId(String courseId) throws Exception {
         if (courseId.trim().isEmpty()) {
             throw new Exception("Mã môn học không được để trống.");
         }
-        if (!courseId.matches("[a-zA-Z0-9]+")) {
-            throw new Exception("Mã môn học chỉ được chứa các chữ cái và số.");
-        }
+        validatePositiveInteger(courseId);  // Kiểm tra nếu là số nguyên không âm
     }
 
+    // Kiểm tra mã giảng viên (chỉ nhận số nguyên không âm)
     private static void validateTeacherId(String teacherId) throws Exception {
         if (teacherId.trim().isEmpty()) {
             throw new Exception("Mã giảng viên không được để trống.");
         }
-        if (!teacherId.matches("[a-zA-Z0-9]+")) {
-            throw new Exception("Mã giảng viên chỉ được chứa các chữ cái và số.");
-        }
+        validatePositiveInteger(teacherId);  // Kiểm tra nếu là số nguyên không âm
     }
 
     private static int validateMaxStudents(String input) throws Exception {
