@@ -21,24 +21,24 @@ public class ClassUI {
             System.out.println("2. Cập nhật lớp học");
             System.out.println("3. Xóa lớp học");
             System.out.println("4. Xem danh sách lớp học");
-            System.out.println("0. Thoát");
+            System.out.println("5. Thoát");
 
             try {
-                System.out.print("➡ Nhập lựa chọn của bạn: ");
+                System.out.print(" Nhập lựa chọn của bạn: ");
                 int choice = Integer.parseInt(scanner.nextLine());
                 switch (choice) {
                     case 1 -> addClass();
                     case 2 -> updateClass();
                     case 3 -> deleteClass();
                     case 4 -> showAllClasses();
-                    case 0 -> {
-                        System.out.println("➡ Thoát quản lý lớp học.");
+                    case 5 -> {
+                        System.out.println(" Thoát quản lý lớp học.");
                         return;
                     }
-                    default -> System.out.println("❌ Lựa chọn không hợp lệ. Vui lòng thử lại.");
+                    default -> System.out.println(" Lựa chọn không hợp lệ. Vui lòng thử lại.");
                 }
             } catch (NumberFormatException e) {
-                System.out.println("❌ Vui lòng nhập số nguyên hợp lệ.");
+                System.out.println(" Vui lòng nhập số nguyên hợp lệ.");
             }
         }
     }
@@ -53,7 +53,7 @@ public class ClassUI {
                 validateNonEmpty(input);
                 return input;
             } catch (Exception e) {
-                System.out.println("❌ " + e.getMessage());
+                System.out.println(e.getMessage());
             }
         }
     }
@@ -65,7 +65,7 @@ public class ClassUI {
             try {
                 return validateInteger(input);
             } catch (Exception e) {
-                System.out.println("❌ " + e.getMessage());
+                System.out.println(e.getMessage());
             }
         }
     }
@@ -84,7 +84,6 @@ public class ClassUI {
         }
     }
 
-    // Kiểm tra số nguyên không âm
     private static void validatePositiveInteger(String input) throws Exception {
         try {
             int value = Integer.parseInt(input);
@@ -96,28 +95,25 @@ public class ClassUI {
         }
     }
 
-    // Kiểm tra mã lớp (chỉ nhận số nguyên không âm)
     private static void validateClassId(String classId) throws Exception {
         if (classId.trim().isEmpty()) {
             throw new Exception("Mã lớp không được để trống.");
         }
-        validatePositiveInteger(classId);  // Kiểm tra nếu là số nguyên không âm
+        validatePositiveInteger(classId);
     }
 
-    // Kiểm tra mã môn học (chỉ nhận số nguyên không âm)
     private static void validateCourseId(String courseId) throws Exception {
         if (courseId.trim().isEmpty()) {
             throw new Exception("Mã môn học không được để trống.");
         }
-        validatePositiveInteger(courseId);  // Kiểm tra nếu là số nguyên không âm
+        validatePositiveInteger(courseId);
     }
 
-    // Kiểm tra mã giảng viên (chỉ nhận số nguyên không âm)
     private static void validateTeacherId(String teacherId) throws Exception {
         if (teacherId.trim().isEmpty()) {
             throw new Exception("Mã giảng viên không được để trống.");
         }
-        validatePositiveInteger(teacherId);  // Kiểm tra nếu là số nguyên không âm
+        validatePositiveInteger(teacherId);
     }
 
     private static int validateMaxStudents(String input) throws Exception {
@@ -140,7 +136,7 @@ public class ClassUI {
                 validateClassId(classId);
                 break;
             } catch (Exception e) {
-                System.out.println("❌ " + e.getMessage());
+                System.out.println(e.getMessage());
             }
         }
 
@@ -151,7 +147,7 @@ public class ClassUI {
                 validateCourseId(courseId);
                 break;
             } catch (Exception e) {
-                System.out.println("❌ " + e.getMessage());
+                System.out.println(e.getMessage());
             }
         }
 
@@ -162,7 +158,7 @@ public class ClassUI {
                 validateTeacherId(teacherId);
                 break;
             } catch (Exception e) {
-                System.out.println("❌ " + e.getMessage());
+                System.out.println(e.getMessage());
             }
         }
 
@@ -173,12 +169,12 @@ public class ClassUI {
                 validateMaxStudents(String.valueOf(maxStudents));
                 break;
             } catch (Exception e) {
-                System.out.println("❌ " + e.getMessage());
+                System.out.println(e.getMessage());
             }
         }
 
         classService.createClass(classId, courseId, teacherId, maxStudents);
-        System.out.println("✅ Thêm lớp học thành công.");
+        System.out.println(" Thêm lớp học thành công.");
     }
 
     private static void updateClass() {
@@ -191,12 +187,12 @@ public class ClassUI {
                 validateClassId(classId);
                 Class existing = classService.getClassById(classId);
                 if (existing == null) {
-                    System.out.println("❌ Không tìm thấy lớp với mã: " + classId);
+                    System.out.println(" Không tìm thấy lớp với mã: " + classId);
                 } else {
                     break;
                 }
             } catch (Exception e) {
-                System.out.println("❌ " + e.getMessage());
+                System.out.println(e.getMessage());
             }
         }
 
@@ -207,7 +203,7 @@ public class ClassUI {
                 validateCourseId(courseId);
                 break;
             } catch (Exception e) {
-                System.out.println("❌ " + e.getMessage());
+                System.out.println(e.getMessage());
             }
         }
 
@@ -218,7 +214,7 @@ public class ClassUI {
                 validateTeacherId(teacherId);
                 break;
             } catch (Exception e) {
-                System.out.println("❌ " + e.getMessage());
+                System.out.println(e.getMessage());
             }
         }
 
@@ -229,12 +225,12 @@ public class ClassUI {
                 validateMaxStudents(String.valueOf(maxStudents));
                 break;
             } catch (Exception e) {
-                System.out.println("❌ " + e.getMessage());
+                System.out.println(e.getMessage());
             }
         }
 
         classService.updateClass(classId, courseId, teacherId, maxStudents);
-        System.out.println("✅ Cập nhật lớp học thành công.");
+        System.out.println(" Cập nhật lớp học thành công.");
     }
 
     private static void deleteClass() {
@@ -247,24 +243,24 @@ public class ClassUI {
                 validateClassId(classId);
                 Class existing = classService.getClassById(classId);
                 if (existing == null) {
-                    System.out.println("❌ Không tìm thấy lớp với mã: " + classId);
+                    System.out.println(" Không tìm thấy lớp với mã: " + classId);
                 } else {
                     break;
                 }
             } catch (Exception e) {
-                System.out.println("❌ " + e.getMessage());
+                System.out.println(e.getMessage());
             }
         }
 
         classService.removeClass(classId);
-        System.out.println("✅ Xóa lớp học thành công.");
+        System.out.println(" Xóa lớp học thành công.");
     }
 
     private static void showAllClasses() {
         System.out.println("\n--- Danh sách lớp học ---");
         ArrayList<Class> classList = classService.getAllClasses();
         if (classList.isEmpty()) {
-            System.out.println("⚠ Không có lớp học nào.");
+            System.out.println(" Không có lớp học nào.");
         } else {
             for (Class cls : classList) {
                 System.out.println("Mã lớp: " + cls.getClassId() +

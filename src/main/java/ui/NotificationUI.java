@@ -17,7 +17,7 @@ public class NotificationUI {
             System.out.println("2. Cập nhật thông báo");
             System.out.println("3. Xóa thông báo");
             System.out.println("4. Xem tất cả thông báo");
-            System.out.println("0. Quay lại");
+            System.out.println("5. Thoát");
             System.out.print("Chọn: ");
             try {
                 int choice = Integer.parseInt(scanner.nextLine());
@@ -26,11 +26,11 @@ public class NotificationUI {
                     case 2 -> updateNotification();
                     case 3 -> deleteNotification();
                     case 4 -> showAllNotifications();
-                    case 0 -> { return; }
-                    default -> System.out.println("❌ Lựa chọn không hợp lệ!");
+                    case 5 -> { return; }
+                    default -> System.out.println("Lựa chọn không hợp lệ!");
                 }
             } catch (NumberFormatException e) {
-                System.out.println("❌ Vui lòng nhập số.");
+                System.out.println("Vui lòng nhập số.");
             }
         }
     }
@@ -44,10 +44,10 @@ public class NotificationUI {
 
                 Notification noti = new Notification(senderId, senderRole, msg);
                 dao.add(noti);
-                System.out.println("✅ Đã gửi thông báo.");
+                System.out.println("Đã gửi thông báo.");
                 break;
             } catch (IllegalArgumentException e) {
-                System.out.println("❌ " + e.getMessage());
+                System.out.println(e.getMessage());
             }
         }
     }
@@ -66,10 +66,10 @@ public class NotificationUI {
                 Notification updated = new Notification(id);
                 updated.setMessage(msg);
                 dao.update(updated);
-                System.out.println("✅ Đã cập nhật thông báo.");
+                System.out.println("Đã cập nhật thông báo.");
                 break;
             } catch (IllegalArgumentException e) {
-                System.out.println("❌ " + e.getMessage());
+                System.out.println(e.getMessage());
             }
         }
     }
@@ -85,7 +85,7 @@ public class NotificationUI {
                 dao.delete(toDelete);
                 break;
             } catch (IllegalArgumentException e) {
-                System.out.println("❌ " + e.getMessage());
+                System.out.println(e.getMessage());
             }
         }
     }
@@ -93,9 +93,9 @@ public class NotificationUI {
     private static void showAllNotifications() {
         ArrayList<Notification> list = dao.selectAll();
         if (list.isEmpty()) {
-            System.out.println("📭 Không có thông báo nào.");
+            System.out.println("Không có thông báo nào.");
         } else {
-            System.out.println("📢 Danh sách thông báo:");
+            System.out.println("Danh sách thông báo:");
             for (Notification n : list) {
                 System.out.println("ID: " + n.getId() + " | [" + n.getCreatedAt() + "] " +
                         n.getSenderRole().toUpperCase() + " (ID: " + n.getSenderId() + "): " +
@@ -104,7 +104,7 @@ public class NotificationUI {
         }
     }
 
-    /// Exception
+    // Exception
     private static void validateMessage(String msg) {
         if (msg.isEmpty()) {
             throw new IllegalArgumentException("Nội dung thông báo không được để trống.");
