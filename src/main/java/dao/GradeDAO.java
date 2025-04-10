@@ -13,13 +13,13 @@ public class GradeDAO implements InterfaceDAO<Grade> {
     // Thêm điểm
     @Override
     public void add(Grade grade) {
-        String sql = "INSERT INTO grades (student_id, class_id, grade) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO grades (grade_id,student_id, class_id, grade) VALUES (?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, grade.getStudentId());
-            stmt.setInt(2, grade.getClassId());
-            stmt.setFloat(3, grade.getGrade());
+            stmt.setInt(1, grade.getGradeId());
+            stmt.setInt(2, grade.getStudentId());
+            stmt.setInt(3, grade.getClassId());
+            stmt.setFloat(4, grade.getGrade());
 
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected > 0) {

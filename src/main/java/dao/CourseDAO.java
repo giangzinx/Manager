@@ -12,13 +12,13 @@ public class CourseDAO implements InterfaceDAO<Course> {
 
     @Override
     public void add(Course course) {
-        String sql = "INSERT INTO courses (course_code, course_name, credits) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO courses (course_id, course_code, course_name, credits) VALUES (?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, course.getCourseCode());
-            stmt.setString(2, course.getCourseName());
-            stmt.setInt(3, course.getCredits());
+            stmt.setInt(1, course.getCourseId());
+            stmt.setString(2, course.getCourseCode());
+            stmt.setString(3, course.getCourseName());
+            stmt.setInt(4, course.getCredits());
 
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected > 0) {
@@ -28,6 +28,7 @@ public class CourseDAO implements InterfaceDAO<Course> {
             e.printStackTrace();
         }
     }
+
 
     @Override
     public void update(Course course) {
@@ -54,7 +55,6 @@ public class CourseDAO implements InterfaceDAO<Course> {
         String sql = "DELETE FROM courses WHERE course_id = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
             stmt.setInt(1, course.getCourseId());
 
             int rowsAffected = stmt.executeUpdate();

@@ -12,13 +12,14 @@ public class ClassDAO implements InterfaceDAO<Class> {
 
     @Override
     public void add(Class aClass) {
-        String sql = "INSERT INTO classes (course_id, teacher_id, max_students) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO classes (class_id, course_id, teacher_id, max_students) VALUES (?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, aClass.getCourseId());
-            stmt.setInt(2, aClass.getTeacherId());
-            stmt.setInt(3, aClass.getMaxStudents());
+            stmt.setInt(1, aClass.getClassId());
+            stmt.setInt(2, aClass.getCourseId());
+            stmt.setInt(3, aClass.getTeacherId());
+            stmt.setInt(4, aClass.getMaxStudents());
 
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected > 0) {
@@ -28,6 +29,7 @@ public class ClassDAO implements InterfaceDAO<Class> {
             e.printStackTrace();
         }
     }
+
 
     @Override
     public void update(Class aClass) {

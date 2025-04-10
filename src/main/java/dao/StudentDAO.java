@@ -19,7 +19,7 @@ public class StudentDAO implements InterfaceDAO<Student> {
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) { // Phải có rs.next() trước khi lấy dữ liệu từ ResultSet
                 if (rs.getString("email").equals(studentEmail) && rs.getString("password").equals(studentPassword)) {
-                    StudentUI.indexStudents();
+                    StudentUI.showMenu();
                 } else {
                     System.out.println("Wrong email or password");
                 }
@@ -34,20 +34,17 @@ public class StudentDAO implements InterfaceDAO<Student> {
 
     @Override
     public void add(Student student) {
-        String sql = "INSERT INTO students (name, student_code, email, password) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO students (student_id, name, student_code, email, password) VALUES (?, ?, ?, ?, ?)";
 
-        // Kết nối cơ sở dữ liệu
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            // Thiết lập các tham số cho PreparedStatement
-            stmt.setString(1, student.getName());
-            stmt.setString(2, student.getStudentCode());
-            stmt.setString(3, student.getEmail());
-            stmt.setString(4, student.getPassword());
+            stmt.setInt(1, student.getStudentId());
+            stmt.setString(2, student.getName());
+            stmt.setString(3, student.getStudentCode());
+            stmt.setString(4, student.getEmail());
+            stmt.setString(5, student.getPassword());
 
-
-            // Thực thi câu lệnh insert
             int rowsAffected = stmt.executeUpdate();
 
             if (rowsAffected > 0) {
@@ -58,6 +55,7 @@ public class StudentDAO implements InterfaceDAO<Student> {
             e.printStackTrace();
         }
     }
+
 
 
     @Override

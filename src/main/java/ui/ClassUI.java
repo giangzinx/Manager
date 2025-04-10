@@ -52,6 +52,16 @@ public class ClassUI {
     private static void addClass() {
         System.out.println("Nhập thông tin lớp học:");
 
+        System.out.print("Mã lớp học (class_id): ");
+        int classId = scanner.nextInt();
+
+        // Kiểm tra xem classId đã tồn tại chưa
+        Class existingClass = classDAO.selectById(new Class(classId, 0, 0, 0));
+        if (existingClass != null) {
+            System.out.println("Mã lớp đã tồn tại! Không thể thêm.");
+            return;
+        }
+
         System.out.print("Mã khóa học (course_id): ");
         int courseId = scanner.nextInt();
 
@@ -61,7 +71,7 @@ public class ClassUI {
         System.out.print("Số lượng sinh viên tối đa (max_students): ");
         int maxStudents = scanner.nextInt();
 
-        Class newClass = new Class(0, courseId, teacherId, maxStudents); // classId = 0 vì nó tự động tăng
+        Class newClass = new Class(classId, courseId, teacherId, maxStudents);
         classDAO.add(newClass);
     }
 

@@ -12,16 +12,15 @@ public class TeacherDAO implements InterfaceDAO<Teacher> {
 
     @Override
     public void add(Teacher teacher) {
-        String sql = "INSERT INTO teachers (name, email, password) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO teachers (teacher_id, name, email, password) VALUES (?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            // Set parameters for PreparedStatement
-            stmt.setString(1, teacher.getName());
-            stmt.setString(2, teacher.getEmail());
-            stmt.setString(3, teacher.getPassword());
+            stmt.setInt(1, teacher.getTeacherId());
+            stmt.setString(2, teacher.getName());
+            stmt.setString(3, teacher.getEmail());
+            stmt.setString(4, teacher.getPassword());
 
-            // Execute the update
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected > 0) {
                 System.out.println("Teacher added successfully!");
@@ -31,6 +30,7 @@ public class TeacherDAO implements InterfaceDAO<Teacher> {
             e.printStackTrace();
         }
     }
+
 
     @Override
     public void update(Teacher teacher) {

@@ -53,16 +53,23 @@ public class TeacherUI {
     }
 
     private static void addTeacher() {
+        System.out.println("Nhập ID giáo viên:");
+        int teacherId = scanner.nextInt();
+        scanner.nextLine(); // Đọc ký tự enter sau khi nhập số
+
         System.out.println("Nhập tên giáo viên:");
         String name = scanner.nextLine();
+
         System.out.println("Nhập email giáo viên:");
         String email = scanner.nextLine();
+
         System.out.println("Nhập mật khẩu giáo viên:");
         String password = scanner.nextLine();
 
-        Teacher teacher = new Teacher(name, email, password);
+        Teacher teacher = new Teacher(teacherId, name, email, password);
         teacherDAO.add(teacher);
     }
+
 
     private static void updateTeacher() {
         System.out.println("Nhập ID giáo viên cần sửa:");

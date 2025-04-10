@@ -1,23 +1,18 @@
 package ui;
 
-import dao.CourseDAO;
-import dao.GradeDAO;
 import dao.StudentDAO;
 import model.Student;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class StudentUI {
-    private static Scanner scanner = new Scanner(System.in);
-    private static StudentDAO studentDAO = new StudentDAO();
-    private static CourseDAO courseDAO = new CourseDAO();
-    private static GradeDAO gradeDAO = new GradeDAO();
+    private static final Scanner scanner = new Scanner(System.in);
+    private static final StudentDAO studentDAO = new StudentDAO();
 
-    public static void indexStudents() {
+    public static void showMenu() {
         while (true) {
-            System.out.println("Chọn chức năng:");
+            System.out.println("\nChọn chức năng:");
             System.out.println("1. Thêm sinh viên");
             System.out.println("2. Sửa sinh viên");
             System.out.println("3. Xóa sinh viên");
@@ -26,151 +21,268 @@ public class StudentUI {
             System.out.println("6. Tìm sinh viên theo email");
             System.out.println("7. Thoát");
 
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            System.out.print("\uD83D\uDC49 Nhập lựa chọn: ");
+            String input = scanner.nextLine();
+            int choice;
+
+            try {
+                choice = Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                System.out.println("❌ Lựa chọn không hợp lệ. Vui lòng nhập số.");
+                continue;
+            }
 
             switch (choice) {
-                case 1:
-                    addStudent();
-                    break;
-                case 2:
-                    updateStudent();
-                    break;
-                case 3:
-                    deleteStudent();
-                    break;
-                case 4:
-                    showStudents();
-                    break;
-                case 5:
-                    searchStudentById();
-                    break;
-                case 6:
-                    searchStudentByEmail();
-                    break;
-                case 7:
-                    System.out.println("Thoát chương trình.");
+                case 1 -> addStudent();
+                case 2 -> updateStudent();
+                case 3 -> deleteStudent();
+                case 4 -> showStudents();
+                case 5 -> searchStudentById();
+                case 6 -> searchStudentByEmail();
+                case 7 -> {
+                    System.out.println("\uD83D\uDC4B Thoát chương trình.");
                     return;
-                default:
-                    System.out.println("Lựa chọn không hợp lệ! Vui lòng thử lại.");
+                }
+                default -> System.out.println("❌ Lựa chọn không hợp lệ! Vui lòng thử lại.");
             }
         }
     }
 
-    // Thêm sinh viên
-    private static void addStudent() {
-        System.out.println("Nhập tên sinh viên:");
-        String name = scanner.nextLine();
-        System.out.println("Nhập mã sinh viên:");
-        String studentCode = scanner.nextLine();
-        System.out.println("Nhập email:");
-        String email = scanner.nextLine();
-        System.out.println("Nhập mật khẩu:");
-        String password = scanner.nextLine();
-
-        Student student = new Student(0, name, studentCode, email, password); // ID sẽ tự động tăng
-        studentDAO.add(student);  // Gọi phương thức add từ StudentDAO
-        System.out.println("Sinh viên đã được thêm thành công!");
+    // ======== VALIDATION =========
+    private static void validateNotEmpty(String input, String fieldName) {
+        if (input == null || input.trim().isEmpty()) {
+            throw new IllegalArgumentException("❌ " + fieldName + " không được để trống.");
+        }
     }
 
-    // Sửa thông tin sinh viên
+    private static void validateEmail(String email) {
+        if (!email.matches("^\\S+@stu\\.ptit\\.edu\\.vn$")) {
+            throw new IllegalArgumentException("❌ Email không hợp lệ (phải có đuôi @stu.ptit.edu.vn).");
+        }
+    }
+
+    private static void validatePassword(String password) {
+        if (password.length() < 4) {
+            throw new IllegalArgumentException("❌ Mật khẩu phải có ít nhất 4 ký tự.");
+        }
+    }
+
+    private static void validateName(String name) {
+        if (!name.matches("^[\\p{L} ]+$")) {
+            throw new IllegalArgumentException("❌ Tên không được chứa số hoặc ký tự đặc biệt.");
+        }
+    }
+
+    private static void validateStudentExists(Student student) {
+        if (student == null) {
+            throw new IllegalArgumentException("❌ Sinh viên không tồn tại.");
+        }
+    }
+    // =============================
+
+    private static void addStudent() {
+        int studentId;
+        String name, studentCode, email, password;
+
+        while (true) {
+            try {
+                System.out.print("Nhập ID sinh viên: ");
+                studentId = Integer.parseInt(scanner.nextLine().trim());
+                break;
+            } catch (Exception e) {
+                System.out.println("❌ ID không hợp lệ.");
+            }
+        }
+
+        while (true) {
+            try {
+                System.out.print("Nhập tên sinh viên: ");
+                name = scanner.nextLine().trim();
+                validateNotEmpty(name, "Tên sinh viên");
+                validateName(name);
+                break;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
+        while (true) {
+            try {
+                System.out.print("Nhập mã sinh viên: ");
+                studentCode = scanner.nextLine().trim();
+                validateNotEmpty(studentCode, "Mã sinh viên");
+                break;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
+        while (true) {
+            try {
+                System.out.print("Nhập email: ");
+                email = scanner.nextLine().trim();
+                validateEmail(email);
+                break;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
+        while (true) {
+            try {
+                System.out.print("Nhập mật khẩu: ");
+                password = scanner.nextLine().trim();
+                validatePassword(password);
+                break;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
+        Student student = new Student(studentId, name, studentCode, email, password);
+        studentDAO.add(student);
+        System.out.println("✅ Sinh viên đã được thêm thành công!");
+    }
+
     private static void updateStudent() {
-        System.out.println("Nhập ID sinh viên cần sửa:");
-        int studentId = scanner.nextInt();
-        scanner.nextLine(); // Đọc newline còn sót lại
+        int studentId;
+        while (true) {
+            try {
+                System.out.print("Nhập ID sinh viên cần sửa: ");
+                studentId = Integer.parseInt(scanner.nextLine().trim());
+                break;
+            } catch (Exception e) {
+                System.out.println("❌ ID không hợp lệ.");
+            }
+        }
 
         Student student = studentDAO.selectById(new Student(studentId));
-        if (student == null) {
-            System.out.println("Sinh viên không tồn tại!");
+        try {
+            validateStudentExists(student);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
             return;
         }
 
-        System.out.println("Nhập tên mới (hiện tại: " + student.getName() + "):");
-        String name = scanner.nextLine();
-        if (!name.isEmpty()) student.setName(name);
+        System.out.print("Nhập tên mới (hiện tại: " + student.getName() + "): ");
+        String name = scanner.nextLine().trim();
+        if (!name.isEmpty()) {
+            try {
+                validateNotEmpty(name, "Tên sinh viên");
+                validateName(name);
+                student.setName(name);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
 
-        System.out.println("Nhập email mới (hiện tại: " + student.getEmail() + "):");
-        String email = scanner.nextLine();
-        if (!email.isEmpty()) student.setEmail(email);
+        System.out.print("Nhập email mới (hiện tại: " + student.getEmail() + "): ");
+        String email = scanner.nextLine().trim();
+        if (!email.isEmpty()) {
+            try {
+                validateEmail(email);
+                student.setEmail(email);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
 
-        System.out.println("Nhập mã sinh viên mới (hiện tại: " + student.getStudentCode() + "):");
-        String code = scanner.nextLine();
-        if (!code.isEmpty()) student.setStudentCode(code);
+        System.out.print("Nhập mã sinh viên mới (hiện tại: " + student.getStudentCode() + "): ");
+        String code = scanner.nextLine().trim();
+        if (!code.isEmpty()) {
+            try {
+                validateNotEmpty(code, "Mã sinh viên");
+                student.setStudentCode(code);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
 
-        System.out.println("Nhập mật khẩu mới (hiện tại: " + student.getPassword() + "):");
-        String password = scanner.nextLine();
-        if (!password.isEmpty()) student.setPassword(password);
+        System.out.print("Nhập mật khẩu mới (hiện tại: " + student.getPassword() + "): ");
+        String password = scanner.nextLine().trim();
+        if (!password.isEmpty()) {
+            try {
+                validatePassword(password);
+                student.setPassword(password);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
 
         studentDAO.update(student);
-        System.out.println("Sinh viên đã được cập nhật!");
+        System.out.println("✅ Sinh viên đã được cập nhật!");
     }
 
-    // Xóa sinh viên
     private static void deleteStudent() {
-        System.out.println("Nhập ID sinh viên cần xóa:");
-        int studentId = scanner.nextInt();
-        scanner.nextLine();
-
-        Student student = studentDAO.selectById(new Student(studentId));  // Lấy sinh viên theo ID
-        if (student == null) {
-            System.out.println("Sinh viên không tồn tại!");
-            return;
+        while (true) {
+            try {
+                System.out.print("Nhập ID sinh viên cần xóa: ");
+                int id = Integer.parseInt(scanner.nextLine().trim());
+                Student student = studentDAO.selectById(new Student(id));
+                validateStudentExists(student);
+                studentDAO.delete(student);
+                System.out.println("✅ Sinh viên đã được xóa!");
+                return;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
         }
-
-        studentDAO.delete(student);  // Xóa sinh viên
-        System.out.println("Sinh viên đã được xóa!");
     }
 
-    // Hiển thị tất cả sinh viên
     private static void showStudents() {
-        List<Student> students = studentDAO.selectAll();
+        ArrayList<Student> students = studentDAO.selectAll();
         if (students.isEmpty()) {
-            System.out.println("Không có sinh viên nào!");
+            System.out.println("⚠️ Không có sinh viên nào.");
             return;
         }
 
-        System.out.println("Danh sách sinh viên:");
+        System.out.println("📋 Danh sách sinh viên:");
         for (Student student : students) {
             System.out.println(student);
         }
     }
 
-    // Tìm sinh viên theo tên
     private static void searchStudentById() {
-        System.out.print("Nhập ID sinh viên cần tìm: ");
-        int studentId = scanner.nextInt();
-
-        Student student = studentDAO.selectById(new Student(studentId, null, null, null, null));
-
-        if (student != null) {
-            System.out.println("Thông tin sinh viên:");
-            System.out.println(student);
-        } else {
-            System.out.println("Không tìm thấy sinh viên với ID: " + studentId);
+        while (true) {
+            try {
+                System.out.print("Nhập ID sinh viên cần tìm: ");
+                int id = Integer.parseInt(scanner.nextLine().trim());
+                Student result = studentDAO.selectById(new Student(id));
+                validateStudentExists(result);
+                System.out.println("🔎 Thông tin sinh viên:");
+                System.out.println(result);
+                break;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
         }
     }
 
-
-    // Tìm sinh viên theo email
     private static void searchStudentByEmail() {
-        System.out.println("Nhập email của sinh viên:");
-        String email = scanner.nextLine();
-        Student student = new Student();
-        student.setEmail(email);
+        while (true) {
+            try {
+                System.out.print("Nhập email của sinh viên: ");
+                String email = scanner.nextLine().trim();
+                Student student = new Student();
+                student.setEmail(email);
 
-        ArrayList<Student> students = studentDAO.selectByCondition(student);
-        if (students.isEmpty()) {
-            System.out.println("Không tìm thấy sinh viên với email này!");
-            return;
-        }
+                ArrayList<Student> students = studentDAO.selectByCondition(student);
+                if (students.isEmpty()) {
+                    throw new IllegalArgumentException("❌ Không tìm thấy sinh viên với email này!");
+                }
 
-        System.out.println("Danh sách sinh viên tìm thấy:");
-        for (Student st : students) {
-            System.out.println(st);
+                System.out.println("📋 Danh sách sinh viên tìm thấy:");
+                for (Student st : students) {
+                    System.out.println(st);
+                }
+                break;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
         }
     }
 
     public static void main(String[] args) {
-        indexStudents();
+        showMenu();
     }
 }
